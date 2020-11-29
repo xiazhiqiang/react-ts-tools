@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import { message, Button, Tooltip } from "antd";
 import QRCode from "qrcode.react";
+import { copyToClipboard } from "../../utils/index";
+
 import "./index.scss";
 
 const testH5Url = (url: string) => /^https?:\/\//.test(url);
@@ -113,9 +116,9 @@ export default () => {
         onChange={textareaOnChange}
       />
 
-      <div className="btn-wrapper">
-        <button onClick={btnOnClick}>点击转换</button>
-      </div>
+      <Button type="primary" onClick={btnOnClick}>
+        点击转换
+      </Button>
 
       {true ? (
         <div className="transfer-wrapper">
@@ -125,7 +128,17 @@ export default () => {
             level="M"
             size={128 * Math.ceil(transferredUrl.length / 150)}
           />
-          <pre>{transferredUrl}</pre>
+          <Tooltip title="点击链接即可复制" placement="topLeft">
+            <p
+              className="transferred-url-text"
+              onClick={() => {
+                copyToClipboard(transferredUrl);
+                message.success("已复制到剪贴板！");
+              }}
+            >
+              {transferredUrl}
+            </p>
+          </Tooltip>
         </div>
       ) : null}
     </div>

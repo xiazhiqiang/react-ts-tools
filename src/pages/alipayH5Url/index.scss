@@ -1,6 +1,7 @@
 .page {
   margin: 0 auto;
   width: 100%;
+  padding: 20px;
 }
 
 .title {
@@ -27,5 +28,11 @@
 
 .transfer-wrapper {
   margin: 20px auto;
+  padding: 0 0 20px;
   text-align: center;
+}
+
+.transferred-url-text {
+  word-break: break-all;
+  cursor: pointer;
 }

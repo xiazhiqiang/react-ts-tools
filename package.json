@@ -1,12 +1,13 @@
 {
   "name": "demo",
   "version": "1.0.0",
-  "description": "",
+  "description": "Demo或一些工具",
   "keywords": [],
   "main": "src/index.tsx",
   "dependencies": {
     "@types/qrcode.react": "1.0.1",
     "@types/react-router-dom": "5.1.6",
+    "antd": "4.8.6",
     "qrcode.react": "1.0.0",
     "react": "17.0.0",
     "react-dom": "17.0.0",
