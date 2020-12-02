@@ -7,6 +7,7 @@
   "dependencies": {
     "@types/qrcode.react": "1.0.1",
     "@types/react-router-dom": "5.1.6",
+    "@uform/antd": "1.0.5",
     "antd": "4.8.6",
     "qrcode.react": "1.0.0",
     "react": "17.0.0",

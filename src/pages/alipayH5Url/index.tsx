@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { message, Button, Tooltip } from "antd";
+import { message, Button, Tooltip, Radio } from "antd";
 import QRCode from "qrcode.react";
 import { copyToClipboard } from "../../utils/index";
 
@@ -7,37 +7,47 @@ import "./index.scss";
 
 const testH5Url = (url: string) => /^https?:\/\//.test(url);
 
-const zlbIndexWebview = (originUrl: string) => {
+const zlbMpaas = ({ originUrl, env }: any) => {
+  return `zwfw://MiniApp?appId=2019031512345679&page=%2Fpages%2Findex%2Findex&query=${encodeURIComponent(
+    `url=${originUrl}&type=mini&portalEnv=${env}`
+  )}`;
+};
+
+const zlbIndexWebview = ({ originUrl, env }: any) => {
   return `alipays://platformapi/startapp?appId=2018090361258298&page=pages%2Findex%2Findex&query=${encodeURIComponent(
-    `url=${encodeURIComponent(originUrl)}&type=mini`
+    `url=${encodeURIComponent(originUrl)}&type=mini&portalEnv=${env}`
   )}`;
 };
 
-const zlbWebviewBridge = (originUrl: string) => {
+const zlbWebviewBridge = ({ originUrl, env }: any) => {
   return `alipays://platformapi/startapp?appId=2018090361258298&page=pages%2FwebviewBridged%2Findex&query=${encodeURIComponent(
-    `webviewUrl=${encodeURIComponent(originUrl)}`
+    `webviewUrl=${encodeURIComponent(originUrl)}&portalEnv=${env}`
   )}`;
 };
 
-const miniappOpenH5 = (originUrl: string) => {
+const alipayWebview = ({ originUrl, env }: any) => {
   return `alipays://platformapi/startapp?appId=20000067&url=${encodeURIComponent(
     originUrl
-  )}`;
+  )}&portalEnv=${env}`;
 };
 
 const transferFuncMap: any = {
+  zlbMpaas,
   zlbIndexWebview,
   zlbWebviewBridge,
-  miniappOpenH5
+  alipayWebview
 };
+
+const radioStyle = { display: "block" };
 
 /**
  * 参考：https://myjsapi.alipay.com/jsapi/h5app-lifecycle.html
  */
 export default () => {
   const [originUrl, setOriginUrl] = useState<string>("");
-  const [openType, setOpenType] = useState<string>("");
+  const [openType, setOpenType] = useState<string>("zlbWebviewBridge"); // 默认浙里办小程序webviewBridged
   const [transferredUrl, setTransferredUrl] = useState<string>("");
+  const [env, setEnv] = useState("publish"); // 默认走正式
 
   const textareaOnChange = (e: any) => {
     setOriginUrl(e.target.value ? e.target.value.trim() : "");
@@ -45,6 +55,10 @@ export default () => {
 
   const radioOnChange = (e: any) => {
     setOpenType(e.target.value);
+  };
+
+  const envRadioOnChange = (e: any) => {
+    setEnv(e.target.value);
   };
 
   const btnOnClick = () => {
@@ -59,56 +73,41 @@ export default () => {
     }
 
     if (typeof transferFuncMap[openType] === "function") {
-      const url = transferFuncMap[openType](originUrl);
+      const url = transferFuncMap[openType]({ originUrl });
       setTransferredUrl(url);
     }
   };
 
   return (
     <div className="page">
-      <h1 className="title">唤起支付宝打开 H5 转换工具</h1>
+      <h1 className="title">唤起容器打开 H5 转换工具</h1>
 
-      <label>请选择打开方式：</label>
-      <div>
-        <ul className="ul">
-          <li>
-            <input
-              type="radio"
-              name="urlOpenType"
-              value="zlbIndexWebview"
-              id="zlbIndexWebview"
-              onChange={radioOnChange}
-            />
-            <label htmlFor="zlbIndexWebview">
-              浙里办小程序 <strong>首页跳转 webview 页加载 H5</strong>
-            </label>
-          </li>
-          <li>
-            <input
-              type="radio"
-              name="urlOpenType"
-              id="zlbWebviewBridge"
-              value="zlbWebviewBridge"
-              onChange={radioOnChange}
-            />
-            <label htmlFor="zlbWebviewBridge">
-              浙里办小程序 <strong>webviewBridged 页加载 H5</strong>
-            </label>
-          </li>
-          <li>
-            <input
-              type="radio"
-              name="urlOpenType"
-              id="miniappOpenH5"
-              value="miniappOpenH5"
-              onChange={radioOnChange}
-            />
-            <label htmlFor="miniappOpenH5">
-              支付宝 <strong> H5 容器加载</strong>
-            </label>
-          </li>
-        </ul>
-      </div>
+      <h3>请选择打开方式：</h3>
+      <Radio.Group
+        onChange={radioOnChange}
+        value={openType}
+        defaultValue="zlbWebviewBridge"
+      >
+        <Radio style={radioStyle} value="zlbWebviewBridge">
+          浙里办小程序 <strong>webviewBridged 页加载 H5</strong>
+        </Radio>
+        <Radio style={radioStyle} value="zlbIndexWebview">
+          浙里办小程序 <strong>首页跳转 webview 页加载 H5</strong>
+        </Radio>
+        <Radio style={radioStyle} value="zlbmpaas">
+          浙里办 APP <strong> Mpaas 小程序 webview 加载 H5</strong>
+        </Radio>
+        <Radio style={radioStyle} value="alipayWebview">
+          支付宝 <strong> H5 容器加载 H5</strong>
+        </Radio>
+      </Radio.Group>
+
+      <h3>请选择环境：</h3>
+      <Radio.Group onChange={envRadioOnChange} value={env}>
+        <Radio value="publish">正式</Radio>
+        <Radio value="prepub">预发</Radio>
+        <Radio value="daily">日常</Radio>
+      </Radio.Group>
 
       <textarea
         className="textarea"
