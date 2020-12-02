@@ -7,28 +7,28 @@ import "./index.scss";
 
 const testH5Url = (url: string) => /^https?:\/\//.test(url);
 
-const zlbMpaas = ({ originUrl, env }: any) => {
+const zlbMpaas = ({ originUrl, portalEnv }: any) => {
   return `zwfw://MiniApp?appId=2019031512345679&page=%2Fpages%2Findex%2Findex&query=${encodeURIComponent(
-    `url=${originUrl}&type=mini&portalEnv=${env}`
+    `url=${originUrl}&type=mini&portalEnv=${portalEnv}`
   )}`;
 };
 
-const zlbIndexWebview = ({ originUrl, env }: any) => {
+const zlbIndexWebview = ({ originUrl, portalEnv }: any) => {
   return `alipays://platformapi/startapp?appId=2018090361258298&page=pages%2Findex%2Findex&query=${encodeURIComponent(
-    `url=${encodeURIComponent(originUrl)}&type=mini&portalEnv=${env}`
+    `url=${encodeURIComponent(originUrl)}&type=mini&portalEnv=${portalEnv}`
   )}`;
 };
 
-const zlbWebviewBridge = ({ originUrl, env }: any) => {
+const zlbWebviewBridge = ({ originUrl, portalEnv }: any) => {
   return `alipays://platformapi/startapp?appId=2018090361258298&page=pages%2FwebviewBridged%2Findex&query=${encodeURIComponent(
-    `webviewUrl=${encodeURIComponent(originUrl)}&portalEnv=${env}`
+    `webviewUrl=${encodeURIComponent(originUrl)}&portalEnv=${portalEnv}`
   )}`;
 };
 
-const alipayWebview = ({ originUrl, env }: any) => {
+const alipayWebview = ({ originUrl, portalEnv }: any) => {
   return `alipays://platformapi/startapp?appId=20000067&url=${encodeURIComponent(
     originUrl
-  )}&portalEnv=${env}`;
+  )}&portalEnv=${portalEnv}`;
 };
 
 const transferFuncMap: any = {
@@ -47,7 +47,7 @@ export default () => {
   const [originUrl, setOriginUrl] = useState<string>("");
   const [openType, setOpenType] = useState<string>("zlbWebviewBridge"); // 默认浙里办小程序webviewBridged
   const [transferredUrl, setTransferredUrl] = useState<string>("");
-  const [env, setEnv] = useState("publish"); // 默认走正式
+  const [portalEnv, setPortalEnv] = useState("online"); // 默认走正式
 
   const textareaOnChange = (e: any) => {
     setOriginUrl(e.target.value ? e.target.value.trim() : "");
@@ -58,7 +58,7 @@ export default () => {
   };
 
   const envRadioOnChange = (e: any) => {
-    setEnv(e.target.value);
+    setPortalEnv(e.target.value);
   };
 
   const btnOnClick = () => {
@@ -73,7 +73,7 @@ export default () => {
     }
 
     if (typeof transferFuncMap[openType] === "function") {
-      const url = transferFuncMap[openType]({ originUrl });
+      const url = transferFuncMap[openType]({ originUrl, portalEnv });
       setTransferredUrl(url);
     }
   };
@@ -103,8 +103,8 @@ export default () => {
       </Radio.Group>
 
       <h3>请选择环境：</h3>
-      <Radio.Group onChange={envRadioOnChange} value={env}>
-        <Radio value="publish">正式</Radio>
+      <Radio.Group onChange={envRadioOnChange} value={portalEnv}>
+        <Radio value="online">正式</Radio>
         <Radio value="prepub">预发</Radio>
         <Radio value="daily">日常</Radio>
       </Radio.Group>
