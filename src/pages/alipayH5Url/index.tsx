@@ -5,29 +5,35 @@ import { copyToClipboard } from "../../utils/index";
 
 import "./index.scss";
 
-const testH5Url = (url: string) => /^https?:\/\//.test(url);
+// const testH5Url = (url: string) => /^https?:\/\//.test(url);
 
 const zlbMpaas = ({ originUrl, portalEnv }: any) => {
   return `zwfw://MiniApp?appId=2019031512345679&page=%2Fpages%2Findex%2Findex&query=${encodeURIComponent(
-    `url=${originUrl}&type=mini&portalEnv=${portalEnv}`
+    `type=mini&portalEnv=${portalEnv}${
+      originUrl ? `&url=${encodeURIComponent(originUrl)}` : ""
+    }`
   )}`;
 };
 
 const zlbIndexWebview = ({ originUrl, portalEnv }: any) => {
   return `alipays://platformapi/startapp?appId=2018090361258298&page=pages%2Findex%2Findex&query=${encodeURIComponent(
-    `url=${encodeURIComponent(originUrl)}&type=mini&portalEnv=${portalEnv}`
+    `type=mini&portalEnv=${portalEnv}${
+      originUrl ? `&url=${encodeURIComponent(originUrl)}` : ""
+    }`
   )}`;
 };
 
 const zlbWebviewBridge = ({ originUrl, portalEnv }: any) => {
   return `alipays://platformapi/startapp?appId=2018090361258298&page=pages%2FwebviewBridged%2Findex&query=${encodeURIComponent(
-    `webviewUrl=${encodeURIComponent(originUrl)}&portalEnv=${portalEnv}`
+    `portalEnv=${portalEnv}${
+      originUrl ? `&webviewUrl=${encodeURIComponent(originUrl)}` : ""
+    }`
   )}`;
 };
 
 const alipayWebview = ({ originUrl, portalEnv }: any) => {
   return `alipays://platformapi/startapp?appId=20000067&url=${encodeURIComponent(
-    originUrl
+    originUrl || ""
   )}&portalEnv=${portalEnv}`;
 };
 
@@ -67,11 +73,6 @@ export default () => {
       return false;
     }
 
-    if (!testH5Url(originUrl)) {
-      alert("请输入 H5 URL");
-      return false;
-    }
-
     if (typeof transferFuncMap[openType] === "function") {
       const url = transferFuncMap[openType]({ originUrl, portalEnv });
       setTransferredUrl(url);
@@ -88,11 +89,11 @@ export default () => {
         value={openType}
         defaultValue="zlbWebviewBridge"
       >
+        <Radio style={radioStyle} value="zlbIndexWebview">
+          浙里办小程序 <strong>加载首页再跳转 webview 页加载 H5</strong>
+        </Radio>
         <Radio style={radioStyle} value="zlbWebviewBridge">
           浙里办小程序 <strong>webviewBridged 页加载 H5</strong>
-        </Radio>
-        <Radio style={radioStyle} value="zlbIndexWebview">
-          浙里办小程序 <strong>首页跳转 webview 页加载 H5</strong>
         </Radio>
         <Radio style={radioStyle} value="zlbmpaas">
           浙里办 APP <strong> Mpaas 小程序 webview 加载 H5</strong>
