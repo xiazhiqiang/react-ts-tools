@@ -51,7 +51,7 @@ const radioStyle = { display: "block" };
  */
 export default () => {
   const [originUrl, setOriginUrl] = useState<string>("");
-  const [openType, setOpenType] = useState<string>("zlbWebviewBridge"); // 默认浙里办小程序webviewBridged
+  const [openType, setOpenType] = useState<string>("zlbIndexWebview"); // 默认浙里办小程序webviewBridged
   const [transferredUrl, setTransferredUrl] = useState<string>("");
   const [portalEnv, setPortalEnv] = useState("online"); // 默认走正式
 
@@ -87,10 +87,10 @@ export default () => {
       <Radio.Group
         onChange={radioOnChange}
         value={openType}
-        defaultValue="zlbWebviewBridge"
+        defaultValue={openType}
       >
         <Radio style={radioStyle} value="zlbIndexWebview">
-          浙里办小程序 <strong>加载首页再跳转 webview 页加载 H5</strong>
+          浙里办小程序 <strong>首页跳转 webview 页加载 H5</strong>
         </Radio>
         <Radio style={radioStyle} value="zlbWebviewBridge">
           浙里办小程序 <strong>webviewBridged 页加载 H5</strong>
@@ -104,7 +104,11 @@ export default () => {
       </Radio.Group>
 
       <h3>请选择环境：</h3>
-      <Radio.Group onChange={envRadioOnChange} value={portalEnv}>
+      <Radio.Group
+        onChange={envRadioOnChange}
+        value={portalEnv}
+        defaultValue={portalEnv}
+      >
         <Radio value="online">正式</Radio>
         <Radio value="prepub">预发</Radio>
         <Radio value="daily">日常</Radio>
