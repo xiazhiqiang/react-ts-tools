@@ -132,10 +132,10 @@ export default () => {
             level="M"
             size={128 * Math.ceil(transferredUrl.length / 150)}
           />
-          <Tooltip title="点击链接即可复制" placement="topLeft">
+          <Tooltip title="双击链接即可复制" placement="top">
             <p
               className="transferred-url-text"
-              onClick={() => {
+              onDoubleClick={() => {
                 copyToClipboard(transferredUrl);
                 message.success("已复制到剪贴板！");
               }}
