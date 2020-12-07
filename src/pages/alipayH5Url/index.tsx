@@ -8,7 +8,7 @@ import "./index.scss";
 // const testH5Url = (url: string) => /^https?:\/\//.test(url);
 
 const zlbMpaas = ({ originUrl, portalEnv }: any) => {
-  return `zwfw://MiniApp?appId=2018090361258297&page=%2Fpages%2Findex%2Findex&query=${encodeURIComponent(
+  return `zwfw://MiniApp?appId=2019031512345679&page=%2Fpages%2Findex%2Findex&query=${encodeURIComponent(
     `type=mini&portalEnv=${portalEnv}${
       originUrl ? `&url=${encodeURIComponent(originUrl)}` : ""
     }`
