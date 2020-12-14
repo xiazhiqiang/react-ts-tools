@@ -20,9 +20,9 @@ export default function App() {
             <li>
               <Link to="/alipayH5url">支付宝打开 H5 转换工具</Link>
             </li>
-            {/* <li>
+            <li>
               <Link to="/demo">Demo</Link>
-            </li> */}
+            </li>
           </ul>
         </Route>
         <Route path="/alipayH5url" exact component={AlipayH5Url} />

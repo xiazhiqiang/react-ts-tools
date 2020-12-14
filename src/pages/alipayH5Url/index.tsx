@@ -90,16 +90,16 @@ export default () => {
         defaultValue={openType}
       >
         <Radio style={radioStyle} value="zlbIndexWebview">
-          浙里办小程序 <strong>首页跳转 webview 页加载 H5</strong>
+          支付宝浙里办小程序 <strong>（首页跳转 webview 页加载 H5）</strong>
         </Radio>
         <Radio style={radioStyle} value="zlbWebviewBridge">
-          浙里办小程序 <strong>webviewBridged 页加载 H5</strong>
+          支付宝浙里办小程序 <strong>（webviewBridged 页加载 H5）</strong>
         </Radio>
         <Radio style={radioStyle} value="zlbMpaas">
-          浙里办 APP <strong> Mpaas 小程序 webview 加载 H5</strong>
+          浙里办 APP <strong>（ Mpaas 小程序 webview 加载 H5）</strong>
         </Radio>
         <Radio style={radioStyle} value="alipayWebview">
-          支付宝 <strong> H5 容器加载 H5</strong>
+          支付宝 APP <strong>（ H5 容器加载 H5）</strong>
         </Radio>
       </Radio.Group>
 
