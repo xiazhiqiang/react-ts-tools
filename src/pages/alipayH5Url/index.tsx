@@ -37,11 +37,20 @@ const alipayWebview = ({ originUrl, portalEnv }: any) => {
   )}&portalEnv=${portalEnv}`;
 };
 
+const guanghaWebview = ({ originUrl, portalEnv }: any) => {
+  return `alipays://platformapi/startapp?appId=2018090361258298&page=${encodeURIComponent(
+    `pages/zw_base_h5/index?title=title&url=${
+      originUrl ? encodeURIComponent(originUrl) : ""
+    }`
+  )}&query=${encodeURIComponent(`type=mini&portalEnv=${portalEnv}`)}`;
+};
+
 const transferFuncMap: any = {
   zlbMpaas,
   zlbIndexWebview,
   zlbWebviewBridge,
-  alipayWebview
+  alipayWebview,
+  guanghaWebview
 };
 
 const radioStyle = { display: "block" };
@@ -89,6 +98,10 @@ export default () => {
         value={openType}
         defaultValue={openType}
       >
+        <Radio style={radioStyle} value="guanghaWebview">
+          支付宝浙里办小程序{" "}
+          <strong>（直接 webview（光华插件）加载 H5）</strong>
+        </Radio>
         <Radio style={radioStyle} value="zlbIndexWebview">
           支付宝浙里办小程序 <strong>（首页跳转 webview 页加载 H5）</strong>
         </Radio>
