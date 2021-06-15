@@ -60,7 +60,7 @@ const radioStyle = { display: "block" };
  */
 export default () => {
   const [originUrl, setOriginUrl] = useState<string>("");
-  const [openType, setOpenType] = useState<string>("zlbIndexWebview"); // 默认浙里办小程序webviewBridged
+  const [openType, setOpenType] = useState<string>("guanghaWebview"); // 默认浙里办小程序webviewBridged
   const [transferredUrl, setTransferredUrl] = useState<string>("");
   const [portalEnv, setPortalEnv] = useState("online"); // 默认走正式
 
