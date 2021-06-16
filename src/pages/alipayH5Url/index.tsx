@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { message, Button, Tooltip, Radio } from "antd";
+import { message, Button, Tooltip, Radio, Input } from "antd";
 import QRCode from "qrcode.react";
 import { copyToClipboard } from "../../utils/index";
 
@@ -37,11 +37,13 @@ const alipayWebview = ({ originUrl, portalEnv }: any) => {
   )}&portalEnv=${portalEnv}`;
 };
 
-const guanghaWebview = ({ originUrl, portalEnv }: any) => {
+const guanghaWebview = ({ originUrl, portalEnv, params = {} }: any) => {
   return `alipays://platformapi/startapp?appId=2018090361258298&page=${encodeURIComponent(
-    `pages/zw_base_h5/index?title=title&url=${
-      originUrl ? encodeURIComponent(originUrl) : ""
-    }`
+    `pages/zw_base_h5/index?${Object.keys(params)
+      .map((i) => {
+        return `${i}=${encodeURIComponent(params[i])}`;
+      })
+      .join("&")}&url=${originUrl ? encodeURIComponent(originUrl) : ""}`
   )}&query=${encodeURIComponent(`type=mini&portalEnv=${portalEnv}`)}`;
 };
 
@@ -63,6 +65,7 @@ export default () => {
   const [openType, setOpenType] = useState<string>("guanghaWebview"); // 默认浙里办小程序webviewBridged
   const [transferredUrl, setTransferredUrl] = useState<string>("");
   const [portalEnv, setPortalEnv] = useState("online"); // 默认走正式
+  const [urlParams, setUrlParams] = useState<any>({});
 
   const textareaOnChange = (e: any) => {
     setOriginUrl(e.target.value ? e.target.value.trim() : "");
@@ -83,7 +86,11 @@ export default () => {
     }
 
     if (typeof transferFuncMap[openType] === "function") {
-      const url = transferFuncMap[openType]({ originUrl, portalEnv });
+      const url = transferFuncMap[openType]({
+        originUrl,
+        portalEnv,
+        params: urlParams
+      });
       setTransferredUrl(url);
     }
   };
@@ -115,6 +122,20 @@ export default () => {
           支付宝 APP <strong>（ H5 容器加载 H5）</strong>
         </Radio>
       </Radio.Group>
+
+      {openType === "guanghaWebview" ? (
+        <>
+          <h3>Title 参数：</h3>
+          <Input
+            placeholder="请输入Title参数"
+            name="title"
+            onChange={(e) => {
+              const { value, name } = e.target;
+              setUrlParams({ [name]: value });
+            }}
+          />
+        </>
+      ) : null}
 
       <h3>请选择环境：</h3>
       <Radio.Group
